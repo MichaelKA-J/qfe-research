@@ -1,14 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  8 19:08:22 2026
-
-@author: michael
-"""
-
+import pandas as pd
 import lseg.data as ld
 from textblob import TextBlob
-# from arch import arch_model
 
 ### Sentiment Index Contstruction
 
@@ -24,11 +16,14 @@ df = ld.news.get_headlines(
 def get_sentiment(text):
     return TextBlob(text).sentiment.polarity
 df['sentiment_score'] = df['headline'].apply(get_sentiment)
-
 sentiment_index = df.sentiment_score.resample('D').mean()
 
-print(sentiment_index.head())
+pos_dummy = (sentiment_index > 0).astype(int)
+neg_dummy = (sentiment_index < 0).astype(int)
 
-
-
-### GARCH Estimation
+sentiment_dummies_df = pd.DataFrame({
+    'mean_sentiment': sentiment_index,
+    'pos_dummy': pos_dummy,
+    'neg_dummy': neg_dummy
+})
+print(sentiment_dummies_df.head())
