@@ -7,7 +7,7 @@ from textblob import TextBlob
 ld.open_session()
 
 df = ld.news.get_headlines(
-    query='OPEC AND Language:LEN', 
+    query='Topic:CRU AND Language:LEN', 
     start='2025-03-08', 
     end='2026-03-08',
     count=100 # 20000 to be safe
